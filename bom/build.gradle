@@ -20,7 +20,6 @@ javaPlatform {
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
     // Camunda / Zeebe artifacts are not on Maven Central
     maven { url = uri('https://artifacts.camunda.com/artifactory/zeebe-io/') }

@@ -22,7 +22,6 @@ plugins {
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
     maven { url = uri('https://artifacts.camunda.com/artifactory/zeebe-io/') }
     maven { url = uri('https://artifacts.camunda.com/artifactory/zeebe-io-snapshots/') }
