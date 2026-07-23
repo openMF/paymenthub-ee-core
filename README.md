@@ -25,6 +25,10 @@ Every PH-EE Java connector depends on this repo twice: on the BOM for its depend
 
 Java 21, Spring Boot 3.4, Apache Camel 4, Jakarta EE 10, built with a Gradle multi-module setup. It publishes `org.mifos:paymenthub-ee-bom` and `org.mifos:paymenthub-ee-core`.
 
+_Placeholder — replace this line with a one-sentence description of what paymenthub-ee-core does._
+
+[![License](https://img.shields.io/badge/License-MPL--2.0-blue.svg)](LICENSE)
+
 ## Branches
 
 - `dev` is the active development branch — all PRs should target `dev`.
