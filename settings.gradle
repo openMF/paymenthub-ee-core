@@ -1,0 +1,21 @@
+/*
+ * Copyright 2026 The Mifos Initiative.
+ * Licensed under the Mozilla Public License 2.0.
+ */
+
+// Published coordinates (group, artifact names, version) are NOT hardcoded in the
+// build scripts: they are read from gradle.properties (group, bomArtifact,
+// coreArtifact, version) so they can be renamed without touching any module.
+rootProject.name = 'paymenthub-ee-core'
+
+// bom  — java-platform: the PH-EE Bill of Materials (published as ${bomArtifact})
+// core — the shared connector library, former ph-ee-connector-common
+//        (published as ${coreArtifact})
+include 'bom'
+include 'core'
+
+// bom-verification is a minimal subproject that imports the BOM and resolves
+// all declared dependencies against the real Maven repositories. If any artifact
+// is unavailable, has an incompatible version constraint, or a javax.* artifact
+// leaks onto the classpath, the build fails here — before the BOM is published.
+include 'bom:bom-verification'
