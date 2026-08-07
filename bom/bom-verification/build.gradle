@@ -53,6 +53,15 @@ dependencies {
         exclude group: 'io.camunda', module: 'identity-sdk'
     }
     implementation 'io.camunda:zeebe-client-java'
+    // Broker-side APIs + the metrics client they come with, used by the Kafka
+    // exporter plugin in paymenthub-ee-data-pipeline.
+    implementation 'io.camunda:zeebe-exporter-api'
+    implementation 'io.camunda:zeebe-protocol'
+    implementation 'io.prometheus:simpleclient'
+
+    // Kafka client (managed by the Spring Boot BOM) — the exporter plugin and
+    // the importers all talk to the same Kafka topic.
+    implementation 'org.apache.kafka:kafka-clients'
 
     // Jakarta EE 10
     implementation 'jakarta.validation:jakarta.validation-api'

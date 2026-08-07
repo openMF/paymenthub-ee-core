@@ -48,6 +48,17 @@ dependencies {
         api "io.camunda:spring-zeebe-starter:${zeebeVersion}"
         api "io.camunda:zeebe-client-java:${zeebeVersion}"
         api "io.camunda:zeebe-bpmn-model:${zeebeVersion}"
+        // Broker-side APIs, used by the Kafka exporter plugin in
+        // paymenthub-ee-data-pipeline. They must match the broker version, so
+        // they follow the same zeebeVersion as the clients above.
+        api "io.camunda:zeebe-exporter-api:${zeebeVersion}"
+        api "io.camunda:zeebe-protocol:${zeebeVersion}"
+
+        // ── Prometheus client ─────────────────────────────────────────────────
+        // Zeebe 8.4 exposes its metrics through the Prometheus simpleclient, and
+        // the Kafka exporter registers its own histograms with the same registry,
+        // so the version has to match the one the broker ships.
+        api "io.prometheus:simpleclient:${prometheusSimpleclientVersion}"
 
         // ── Apache CXF ────────────────────────────────────────────────────────
         // CXF 3.x uses javax.*; CXF 4.x uses jakarta.*.
