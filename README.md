@@ -29,7 +29,6 @@ repository has not been migrated yet it is listed under its `ph-ee-*` name and m
 ### Core / Orchestration
 
 [paymenthub-ee-core](https://github.com/openMF/paymenthub-ee-core) – The shared foundation: the platform BOM and the common library every Java component builds on (combines `ph-ee-connector-common` and the BOM). This repo.
-[ph-ee-start-here](https://github.com/openMF/ph-ee-start-here) – Landing/meta repo with the overview docs for the whole multi-repo solution.
 [ph-ee-dpg-core](https://github.com/openMF/ph-ee-dpg-core) – DPG-compliant orchestration engine built on Netflix Conductor (alternative to the Zeebe-based flow). _Not migrated yet._
 [ph-ee-dpg-template](https://github.com/openMF/ph-ee-dpg-template) – Starter template for building components on the Conductor/DPG-core architecture. _Not migrated yet._
 [paymenthub-ee-data-pipeline](https://github.com/openMF/paymenthub-ee-data-pipeline) – Everything that moves workflow data out of the Zeebe broker and into a queryable store (combines `ph-ee-exporter`, `ph-ee-importer-es`, `ph-ee-importer-rdbms` and `ph-ee-zeebe-ops`).
