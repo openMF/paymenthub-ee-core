@@ -22,16 +22,24 @@ public final class ContextUtil {
 
     private ContextUtil() {}
 
-    private static final SimpleDateFormat LOCAL_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-    private static final DecimalFormat AMOUNT_FORMAT = new DecimalFormat("#.####");
-    private static final SimpleDateFormat DATE_HEADER_FORMATTER = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH);
+    // SimpleDateFormat and DecimalFormat keep mutable parse/format state, so a shared instance corrupts results
+    // under concurrent use (e.g. NumberFormatException: For input string: "" when two transfers are sent at once).
+    // One instance per thread keeps the exact formats and lenient parsing.
+    private static final ThreadLocal<SimpleDateFormat> LOCAL_DATE_TIME_FORMAT = ThreadLocal
+            .withInitial(() -> new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"));
+    private static final ThreadLocal<DecimalFormat> AMOUNT_FORMAT = ThreadLocal.withInitial(() -> new DecimalFormat("#.####"));
+    private static final ThreadLocal<SimpleDateFormat> DATE_HEADER_FORMATTER = ThreadLocal.withInitial(() -> {
+        SimpleDateFormat format = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH);
+        format.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return format;
+    });
 
     public static LocalDateTime parseDate(String date) {
         if (date == null) {
             return null;
         }
         try {
-            return LocalDateTime.ofInstant(Instant.ofEpochMilli(LOCAL_DATE_TIME_FORMAT.parse(date).getTime()), ZoneOffset.UTC);
+            return LocalDateTime.ofInstant(Instant.ofEpochMilli(LOCAL_DATE_TIME_FORMAT.get().parse(date).getTime()), ZoneOffset.UTC);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -42,19 +50,18 @@ public final class ContextUtil {
             return null;
         }
         try {
-            return LocalDateTime.ofInstant(Instant.ofEpochMilli(DATE_HEADER_FORMATTER.parse(date).getTime()), ZoneOffset.UTC);
+            return LocalDateTime.ofInstant(Instant.ofEpochMilli(DATE_HEADER_FORMATTER.get().parse(date).getTime()), ZoneOffset.UTC);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static String formatToDateHeader(long date) {
-        DATE_HEADER_FORMATTER.setTimeZone(TimeZone.getTimeZone("GMT"));
-        return DATE_HEADER_FORMATTER.format(Date.from(Instant.ofEpochMilli(date)));
+        return DATE_HEADER_FORMATTER.get().format(Date.from(Instant.ofEpochMilli(date)));
     }
 
     public static String formatDate(LocalDateTime date) {
-        return date == null ? null : LOCAL_DATE_TIME_FORMAT.format(Date.from(date.toInstant(ZoneOffset.UTC)));
+        return date == null ? null : LOCAL_DATE_TIME_FORMAT.get().format(Date.from(date.toInstant(ZoneOffset.UTC)));
     }
 
     public static BigDecimal parseAmount(String amount) {
@@ -62,6 +69,6 @@ public final class ContextUtil {
     }
 
     public static String formatAmount(BigDecimal amount) {
-        return amount == null ? null : AMOUNT_FORMAT.format(amount);
+        return amount == null ? null : AMOUNT_FORMAT.get().format(amount);
     }
 }
